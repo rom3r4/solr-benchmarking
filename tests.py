@@ -1,6 +1,13 @@
 #!/usr/bin/python
 
-# 
+# This test file aims test a Solr
+# platform (Drupal + Solr in our case).
+# the goail is to provide a realistic 
+# scenario where all the searches dont get
+# retrieved from cache. We do so by generating 
+# a long list of unique words and query the server.
+# At last, the server content has previously 
+# populated with these unique words
 # 
 
 
@@ -19,10 +26,19 @@ def global_consts():
     global HOSTNAME
     global MAX_TESTS
 
-    MAX_CONNS = 1
+    # settig CONNS to 3 we will get more realistic 
+    # mean/ average values. Also, imho this wont
+    # affect cache hits and therefor, the Solr
+    # performance test
+    
+    MAX_CONNS = 3
     MAX_CONCURRENT = 1    
     HOSTNAME = "http://voa3r.appgee.net"
-    MAX_TESTS = 1000
+    
+    # using a number greater that words in the
+    # generated dictionary ( about 30000) we will
+    # add some cache to this test
+    MAX_TESTS = 40000
     
     
     
@@ -76,6 +92,7 @@ def generate_dictionary():
     for i in range(1, LIMIT_PER_ROOT):
       DICT.append(root + str(i))
       
+  # about 30.000 with this setup
   print '--> generated '+ str(len(DICT)) +' words in dictionary'      
   return DICT
 
@@ -92,13 +109,13 @@ def init_settings():
 def clean_caches():
   
   print '--> restarting php App server'
-  subprocess.call(["service", "zend", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  # subprocess.call(["service", "zend", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
   print '--> restarting Web server'
-  subprocess.call(["service", "nginx", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  # subprocess.call(["service", "nginx", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
   print '--> restarting Varnish daemon'
-  subprocess.call(["service", "varnish", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  # subprocess.call(["service", "varnish", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
   print '--> restarting Memcache damemon'
-  subprocess.call(["service", "memcached", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  # subprocess.call(["service", "memcached", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
 
   
 def tests(dict):
