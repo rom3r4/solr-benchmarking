@@ -129,11 +129,12 @@ def tests(dict):
     rnd = choice(dict)
     print '---'
     print '--> (1word)selected random word: '+rnd
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
     try:
-      None
+      f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
+      subprocess.call(["ab", "-k", "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd], stdout=f)
     finally:
-      None  
+      f.close()  
     
   print '--> tests using 2 word in search (2/3)'
   for i in range(1, MAX_TESTS):
@@ -142,11 +143,12 @@ def tests(dict):
     rnd2 = choice(dict)
     print '---'
     print '--> (2words)selected random word: '+rnd1+', '+rnd2
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
     try:
-      None
+      f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
+      subprocess.call(["ab", "-k", "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2], stdout=f)
     finally:
-      None  
+      f.close()  
 
   print '--> tests using 1 word in search (3/3)'
   for i in range(1, MAX_TESTS):
@@ -156,11 +158,12 @@ def tests(dict):
     rnd3 = choice(dict)
     print '---'
     print '--> (3words)selected random words: '+rnd1+ ', '+rnd2+', '+rnd3
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
     try:
-      None
+      f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
+      subprocess.call(["ab", "-k", "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"+rnd3], stdout=f)
     finally:
-      None  
+      f.close()  
 
 
 

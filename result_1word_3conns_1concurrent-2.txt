@@ -1,0 +1,44 @@
+This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking voa3r.appgee.net (be patient).....done
+
+
+Server Software:        nginx/1.2.6
+Server Hostname:        voa3r.appgee.net
+Server Port:            80
+
+Document Path:          /search/apachesolr_search/beer897
+Document Length:        43510 bytes
+
+Concurrency Level:      1
+Time taken for tests:   0.205 seconds
+Complete requests:      3
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    3
+Total transferred:      132392 bytes
+HTML transferred:       130530 bytes
+Requests per second:    14.67 [#/sec] (mean)
+Time per request:       68.186 [ms] (mean)
+Time per request:       68.186 [ms] (mean, across all concurrent requests)
+Transfer rate:          632.04 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:     3   68 112.1    101     198
+Waiting:        3   68 112.1    101     198
+Total:          3   68 112.2    101     198
+
+Percentage of the requests served within a certain time (ms)
+  50%      4
+  66%      4
+  75%    198
+  80%    198
+  90%    198
+  95%    198
+  98%    198
+  99%    198
+ 100%    198 (longest request)
