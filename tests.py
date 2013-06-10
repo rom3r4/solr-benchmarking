@@ -40,6 +40,7 @@ def global_consts():
     # using a number greater that words in the
     # generated dictionary ( about 30000) we will
     # add some cache to this test
+    # 40000 default
     MAX_TESTS = 4
     
     
