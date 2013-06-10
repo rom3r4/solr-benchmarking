@@ -88,7 +88,7 @@ def init_settings():
   
 def clean_caches():
   None
-def tests():
+def tests(dict):
   None
 
 
@@ -102,12 +102,12 @@ if __name__ == "__main__":
     init_settings()
     
     print '2. generating dictionary ...'
-    generate_dictionary()
+    dict = generate_dictionary()
     
     print '3. cleaning caches ...'
     clean_caches()
     
     print '4. starting tests ...'
-    tests()
+    tests(dict)
     
     print '5. ...done.'
