@@ -75,11 +75,14 @@ def generate_dictionary():
   for root in ROOT_LIST:
     for i in range(1, LIMIT_PER_ROOT):
       DICT.append(root + str(i))
+      
+  print '--> generated '+ str(len(DICT)) +' words in dictionary'      
   return DICT
 
 
 
 def init_settings():
+
   # non permanent changes
   # this fixed the "too many open connections error"
   # of the Apache Bench command
@@ -87,7 +90,17 @@ def init_settings():
   os.system("ulimit -n 65535")
   
 def clean_caches():
-  None
+  
+  print '--> restarting php App server'
+  subprocess.call(["service", "zend", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  print '--> restarting Web server'
+  subprocess.call(["service", "nginx", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  print '--> restarting Varnish daemon'
+  subprocess.call(["service", "varnish", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  print '--> restarting Memcache damemon'
+  subprocess.call(["service", "memcached", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+
+  
 def tests(dict):
   None
 
