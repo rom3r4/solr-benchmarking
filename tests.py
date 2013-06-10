@@ -11,6 +11,7 @@
 # 
 
 
+from random import choice
 import subprocess
 import os
 
@@ -31,14 +32,15 @@ def global_consts():
     # affect cache hits and therefor, the Solr
     # performance test
     
-    MAX_CONNS = 3
-    MAX_CONCURRENT = 1    
-    HOSTNAME = "http://voa3r.appgee.net"
+    MAX_CONNS = '3'
+    MAX_CONCURRENT = '1'
+    # include 'http://' and a triling '/' at the end    
+    HOSTNAME = "http://voa3r.appgee.net/"
     
     # using a number greater that words in the
     # generated dictionary ( about 30000) we will
     # add some cache to this test
-    MAX_TESTS = 40000
+    MAX_TESTS = 4
     
     
     
@@ -119,8 +121,46 @@ def clean_caches():
 
   
 def tests(dict):
-  None
+  
+  
+  print '--> tests using 1 word in search (1/3)'
+  for i in range(1, MAX_TESTS):
+    type = '1word'
+    rnd = choice(dict)
+    print '---'
+    print '--> (1word)selected random word: '+rnd
+    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    try:
+      None
+    finally:
+      None  
+    
+  print '--> tests using 2 word in search (2/3)'
+  for i in range(1, MAX_TESTS):
+    type = '2word'
+    rnd1 = choice(dict)
+    rnd2 = choice(dict)
+    print '---'
+    print '--> (2words)selected random word: '+rnd1+', '+rnd2
+    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    try:
+      None
+    finally:
+      None  
 
+  print '--> tests using 1 word in search (3/3)'
+  for i in range(1, MAX_TESTS):
+    type = '3word'
+    rnd1 = choice(dict)
+    rnd2 = choice(dict)
+    rnd3 = choice(dict)
+    print '---'
+    print '--> (3words)selected random words: '+rnd1+ ', '+rnd2+', '+rnd3
+    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    try:
+      None
+    finally:
+      None  
 
 
 
