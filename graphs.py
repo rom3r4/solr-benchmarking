@@ -23,48 +23,51 @@ def global_consts():
 def graphs(filelist):
   
   print '--> tests using 1 word in search (1/3)'
+  type = '1word'
   for filename in filelist:
-    type = '1word'
+    if filename.startswith(PREFIX+type):
     
-    print '---'
-    print '--> '+title
-    print '--> generating plot-file for ('+style+')'
+      print '---'
+      print '--> '+filename
+      print '--> generating plot-file for ('+type+')'
 
-    try:
-      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    finally:
-      None
+      try:
+        subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      finally:
+        None
     
   print '--> tests using 2 word in search (2/3)'
+  type = '2word'
   for filename in filelist:
-    type = '2word'
+    if filename.startswith(PREFIX+type):
     
-    print '---'
-    print '--> '+title
-    print '--> generating plot-file for ('+style+')'
-    try:
-      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    finally:
-      None
+      print '---'
+      print '--> '+filename
+      print '--> generating plot-file for ('+type+')'
+      try:
+        subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      finally:
+        None
 
   print '--> tests using 3 words in search (3/3)'
+  type = '3word'
   for filename in filelist:
-    type = '3word'
+    if filename.startswith(PREFIX+type):
     
-    print '---'
-    print '--> '+title
-    print '--> generating plot-file for ('+style+')'
-    try:
-      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    finally:
-      None
+      print '---'
+      print '--> '+filename
+      print '--> generating plot-file for ('+type+')'
+      try:
+        subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      finally:
+        None
 
 
 
 def get_files():
   
   # method 1
-  # files = [ f for f in listdir(PATH) if (isfile(join(PATH,f)) and f.startswith(PREFIX)) ]
+  files = [ f for f in listdir(PATH) if (isfile(join(PATH,f)) and f.startswith(PREFIX)) ]
 
   # method 2
   # f = []
@@ -72,11 +75,11 @@ def get_files():
   #   f.extend(filenames)  
   #   break
 
-  files = []
-  for f in listdir(PATH):
-    if isfile(join(PATH, f)) and f.startswith("r"):
-      print f    
-    
+  # files = []
+  # for f in listdir(PATH):
+  #   if isfile(join(PATH, f)) and f.startswith("r"):
+  #     print f    
+       
   return files
   
   
@@ -87,10 +90,11 @@ if __name__ == "__main__":
   print '2. retrieving files from filesystem...'
   f = get_files()
   
-  print '3. ----'
+  print '3. generating plotfiles...'
+  graphs(f)
   
-  for a in f:
-    print a
+  #for a in f:
+  #  print a
   
   print '4. ...ending.'
   

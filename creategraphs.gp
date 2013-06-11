@@ -5,7 +5,7 @@ set size 1, 1
 # The file we'll write to
 set output "graphs/timeseries.jpg"
 # The graph title
-set title TITLE
+set title FILENAME
 # Where to place the legend/key
 set key left top
 # Draw gridlines oriented on the y axis
