@@ -32,16 +32,22 @@ def global_consts():
     # affect cache hits and therefor, the Solr
     # performance test
     
+    # MAX_CONNS value is set to 3. One of those values
+    # comes from a empty cache, the rest 2/3 comes from
+    # primed caches. This will result on a high standard 
+    # deviation on the result, and, in the other side, 
+    # a more realistic value, since the cache system 
+    # is going to be present on that system
     MAX_CONNS = '3'
     MAX_CONCURRENT = '1'
     # include 'http://' and a triling '/' at the end    
     HOSTNAME = "http://voa3r.appgee.net/"
     
-    # using a number greater that words in the
-    # generated dictionary ( about 30000) we will
-    # add some cache to this test
-    # 40000 default
-    MAX_TESTS = 4
+    # using here number lower than the words in the
+    # generated dictionary ( about 30000) will
+    # ensure our test that the queryed words are 
+    # not likely cached
+    MAX_TESTS = 5
     
     
     
@@ -128,28 +134,38 @@ def tests(dict):
   for i in range(1, MAX_TESTS):
     type = '1word'
     rnd = choice(dict)
+    title = '(1word)selected random word: '+rnd
+    filename = result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    
     print '---'
-    print '--> (1word)selected random word: '+rnd
+    print '--> '+title
     print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
     try:
-      f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "-k", "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd], stdout=f)
+      # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
+      subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd], stdout=stdout=subprocess.PIPE)
+      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
-      f.close()  
+      # f.close()  
+      None
     
   print '--> tests using 2 word in search (2/3)'
   for i in range(1, MAX_TESTS):
     type = '2word'
     rnd1 = choice(dict)
     rnd2 = choice(dict)
+    title = '(2words)selected random word: '+rnd1+', '+rnd2
+    filename = result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    
     print '---'
-    print '--> (2words)selected random word: '+rnd1+', '+rnd2
+    print '--> '+title
     print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
     try:
-      f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "-k", "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2], stdout=f)
+      # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
+      subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2], stdout=subprocess.PIPE)
+      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
-      f.close()  
+      # f.close()  
+      None
 
   print '--> tests using 1 word in search (3/3)'
   for i in range(1, MAX_TESTS):
@@ -157,14 +173,19 @@ def tests(dict):
     rnd1 = choice(dict)
     rnd2 = choice(dict)
     rnd3 = choice(dict)
+    title = '(3words)selected random words: '+rnd1+ ', '+rnd2+', '+rnd3
+    filename = result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    
     print '---'
-    print '--> (3words)selected random words: '+rnd1+ ', '+rnd2+', '+rnd3
+    print '--> '+title
     print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
     try:
-      f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "-k", "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"+rnd3], stdout=f)
+      # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
+      subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"+rnd3], stdout=stdout=subprocess.PIPE)
+      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
-      f.close()  
+      # f.close()  
+      None
 
 
 

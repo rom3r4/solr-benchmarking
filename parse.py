@@ -3,6 +3,10 @@
 #
 #
 
+#
+# DEPRECATED. NOT USED
+#
+
 from os import listdir, walk
 from os.path import isfile, join
 
