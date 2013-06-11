@@ -1,189 +1,104 @@
 #!/usr/bin/python
 
-# This test file aims test a Solr
-# platform (Drupal + Solr in our case).
-# the goail is to provide a realistic 
-# scenario where all the searches dont get
-# retrieved from cache. We do so by generating 
-# a long list of unique words and query the server.
-# At last, the server content has previously 
-# populated with these unique words
-# 
+#
+#
 
+from os import listdir, walk
+from os.path import isfile, join
 
-from random import choice
 import subprocess
-import os
-
 
 def global_consts():
-
-    # set these to a low number and MAX_TESTS
-    # to a hight number, to minimize caches and
-    # get a more real approach 
-    global MAX_CONNS
-    global MAX_CONCURRENT
-    
-    global HOSTNAME
-    global MAX_TESTS
-
-    # settig CONNS to 3 we will get more realistic 
-    # mean/ average values. Also, imho this wont
-    # affect cache hits and therefor, the Solr
-    # performance test
-    
-    # MAX_CONNS value is set to 3. One of those values
-    # comes from a empty cache, the rest 2/3 comes from
-    # primed caches. This will result on a high standard 
-    # deviation on the result, and, in the other side, 
-    # a more realistic value, since the cache system 
-    # is going to be present on that system
-    MAX_CONNS = '3'
-    MAX_CONCURRENT = '1'
-    # include 'http://' and a triling '/' at the end    
-    HOSTNAME = "http://voa3r.appgee.net/"
-    
-    # using here number lower than the words in the
-    # generated dictionary ( about 30000) will
-    # ensure our test that the queryed words are 
-    # not likely cached
-    MAX_TESTS = 5
-    
-    
-    
-def generate_dictionary():
-
-
-  # how many sufixeds should i create per each root.
-  # e.g: root_elephant1, root_elephant2 <-- 2
-  LIMIT_PER_ROOT = 1000
-
-
-  # add sample words here
-  ROOT_LIST = [
-        'test',
-        'word',
-        'car',
-        'dog',
-        'cat',
-        'sun',
-        'beer',
-        'spider',
-        'snake',
-        'table',
-        'window',
-        'man',
-        'pet',
-        'dinosaur',
-        'bee',
-        'fork',
-        'bike',
-        'motorbike',
-        'space',
-        'web',
-        'internet',
-        'lion',
-        'deer',
-        'bear',
-        'frog',
-        'wolf',
-        'pig',
-        'chicken',
-        'turkey',
-        'bull',
-        'plain',
-        'mouse',
-        'beer',
-        'house']
-
-  DICT = []
-  for root in ROOT_LIST:
-    for i in range(1, LIMIT_PER_ROOT):
-      DICT.append(root + str(i))
-      
-  # about 30.000 with this setup
-  print '--> generated '+ str(len(DICT)) +' words in dictionary'      
-  return DICT
-
-
-
+  global PATH
+  global PREFIX 
+  # number of n-uples in searches default is 3 <-- 1word 2words 3words
+  global NUM_TYPES
   
-def graphs(dict):
-  
+  PREFIX = "result_"
+  PATH = "./"
+  NUM_TYPES = 3
+
+
+
+def graphs(filelist):
   
   print '--> tests using 1 word in search (1/3)'
-  for i in range(1, MAX_TESTS):
+  for filename in filelist:
     type = '1word'
-    rnd = choice(dict)
-    title = '(1word)selected random word: '+rnd
-    filename = 'result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '---'
     print '--> '+title
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    print '--> generating plot-file for ('+style+')'
+
     try:
-      # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
-      # f.close()  
       None
     
   print '--> tests using 2 word in search (2/3)'
-  for i in range(1, MAX_TESTS):
+  for filename in filelist:
     type = '2word'
-    rnd1 = choice(dict)
-    rnd2 = choice(dict)
-    title = '(2words)selected random word: '+rnd1+', '+rnd2
-    filename = 'result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '---'
     print '--> '+title
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    print '--> generating plot-file for ('+style+')'
     try:
-      # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2], stdout=subprocess.PIPE, stderr=subprocess.PIPE )
-      # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
-      # f.close()  
       None
 
   print '--> tests using 3 words in search (3/3)'
-  for i in range(1, MAX_TESTS):
+  for filename in filelist:
     type = '3word'
-    rnd1 = choice(dict)
-    rnd2 = choice(dict)
-    rnd3 = choice(dict)
-    title = '(3words)selected random words: '+rnd1+ ', '+rnd2+', '+rnd3
-    filename = 'result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '---'
     print '--> '+title
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    print '--> generating plot-file for ('+style+')'
     try:
-      # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"+rnd3], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
-      # f.close()  
       None
 
 
 
+def get_files():
+  
+  # method 1
+  # files = [ f for f in listdir(PATH) if (isfile(join(PATH,f)) and f.startswith(PREFIX)) ]
 
+  # method 2
+  # f = []
+  # for (dirpath, dirname, filenames) in walk(PATH):
+  #   f.extend(filenames)  
+  #   break
+
+  files = []
+  for f in listdir(PATH):
+    if isfile(join(PATH, f)) and f.startswith("r"):
+      print f    
+    
+  return files
+  
+  
 if __name__ == "__main__":
+  print '1. initializing variables ..'
+  global_consts()
+  
+  print '2. retrieving files from filesystem...'
+  f = get_files()
+  
+  print '3. ----'
+  
+  for a in f:
+    print a
+  
+  print '4. ...ending.'
+  
 
-    print '1. initializing global settings ...'
-    global_consts()
-    init_settings()
+
+
     
-    print '2. generating dictionary ...'
-    dict = generate_dictionary()
     
-    print '3. cleaning caches ...'
-    clean_caches()
     
-    print '4. starting tests ...'
-    tests(dict)
-    
-    print '5. ...done.'
+
+  
