@@ -107,27 +107,8 @@ def generate_dictionary():
 
 
 
-def init_settings():
-
-  # non permanent changes
-  # this fixed the "too many open connections error"
-  # of the Apache Bench command
-  os.system("echo '10240' > /proc/sys/net/core/somaxconn")
-  os.system("ulimit -n 65535")
   
-def clean_caches():
-  
-  print '--> restarting php App server'
-  # subprocess.call(["service", "zend", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
-  print '--> restarting Web server'
-  # subprocess.call(["service", "nginx", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
-  print '--> restarting Varnish daemon'
-  # subprocess.call(["service", "varnish", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
-  print '--> restarting Memcache damemon'
-  # subprocess.call(["service", "memcached", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
-
-  
-def tests(dict):
+def graphs(dict):
   
   
   print '--> tests using 1 word in search (1/3)'
@@ -143,8 +124,7 @@ def tests(dict):
     try:
       # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
       subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"])
-      #, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
       # f.close()  
       None
@@ -163,7 +143,7 @@ def tests(dict):
     try:
       # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
       subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2], stdout=subprocess.PIPE, stderr=subprocess.PIPE )
-      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
       # f.close()  
       None
@@ -183,7 +163,7 @@ def tests(dict):
     try:
       # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
       subprocess.call(["ab", "-k", " -g "+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"+rnd3], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
       # f.close()  
       None
