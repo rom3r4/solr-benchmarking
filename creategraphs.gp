@@ -3,7 +3,7 @@ set terminal jpeg size 500,500
 # This sets the aspect ratio of the graph
 set size 1, 1
 # The file we'll write to
-set output "graphs/timeseries.jpg"
+set output "graphs/".FILENAME.".jpg"
 # The graph title
 set title FILENAME
 # Where to place the legend/key

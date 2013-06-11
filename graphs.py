@@ -6,7 +6,7 @@
 from os import listdir, walk
 from os.path import isfile, join
 
-import subprocess
+import subprocess, os
 
 def global_consts():
   global PATH
@@ -32,7 +32,8 @@ def graphs(filelist):
       print '--> generating plot-file for ('+type+')'
 
       try:
-        subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        os.system("gnuplot -e \"FILENAME=\'"+filename+"\'\" creategraphs.gp")
+        # subprocess.call(["gnuplot", "-e \"FILENAME=\'"+filename+ "\'\"", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       finally:
         None
     
@@ -45,7 +46,8 @@ def graphs(filelist):
       print '--> '+filename
       print '--> generating plot-file for ('+type+')'
       try:
-        subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        os.system("gnuplot -e \"FILENAME=\'"+filename+"\'\" creategraphs.gp")
+        # subprocess.call(["gnuplot", "-e \"FILENAME=\'"+filename+"\'\"", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       finally:
         None
 
@@ -58,7 +60,8 @@ def graphs(filelist):
       print '--> '+filename
       print '--> generating plot-file for ('+type+')'
       try:
-        subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        os.system("gnuplot -e \"FILENAME=\'"+filename+"\'\" creategraphs.gp")
+        # subprocess.call(["gnuplot", "-e \"FILENAME=\'"+filename+ "\'\"", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       finally:
         None
 
