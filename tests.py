@@ -12,8 +12,7 @@
 
 
 from random import choice
-import subprocess
-import os
+import subprocess, os, sys, getopt
 
 
 def global_consts():
@@ -56,7 +55,7 @@ def generate_dictionary():
 
   # how many sufixeds should i create per each root.
   # e.g: root_elephant1, root_elephant2 <-- 2
-  LIMIT_PER_ROOT = 1000
+  LIMIT_PER_ROOT = 30
 
 
   # add sample words here
@@ -101,7 +100,8 @@ def generate_dictionary():
     for i in range(1, LIMIT_PER_ROOT):
       DICT.append(root + str(i))
       
-  # about 30.000 with this setup
+  # 34 items x 30 iteraction = 1400 combinations      
+  # about 1.000 with this setup
   print '--> generated '+ str(len(DICT)) +' words in dictionary'      
   return DICT
 
@@ -118,24 +118,43 @@ def init_settings():
 def clean_caches():
   
   print '--> restarting php App server'
-  # subprocess.call(["service", "zend", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  subprocess.call(["service", "zend", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
   print '--> restarting Web server'
-  # subprocess.call(["service", "nginx", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  subprocess.call(["service", "nginx", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
   print '--> restarting Varnish daemon'
-  # subprocess.call(["service", "varnish", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  subprocess.call(["service", "varnish", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
   print '--> restarting Memcache damemon'
-  # subprocess.call(["service", "memcached", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  subprocess.call(["service", "memcached", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
 
   
-def tests(dict):
+def tests(dict, op):
   
+  
+  if opt in ("-v", "--vertical"):
+    # Vertical Scalability.
+    MAX_CONNS = 100000
+    MAX_CONCURRENT = 100
+    mode='vertical'
+  elif opt in ("-h", "--horizontal"):
+    # Horizontal scalability.
+    MAX_CONNS = 100000
+    MAX_CONCURRENT = 100000
+    mode='horizontal'     
+  else:
+    # Cache test.
+    # 3 x 400 should be lower (1400) that the total
+    # number of words in dictionary, to avoid
+    # colisions.
+    MAX_CONNS = 3
+    MAX_CONCURRENT = 1
+    mode='cache'
   
   print '--> tests using 1 word in search (1/3)'
   for i in range(1, MAX_TESTS):
     type = '1word'
     rnd = choice(dict)
     title = '(1word)selected random word: '+rnd
-    filename = 'result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '---'
     print '--> '+title
@@ -147,6 +166,10 @@ def tests(dict):
     finally:
       # f.close()  
       None
+
+  print '--> cleaning caches ...'
+  clean_caches()
+
     
   print '--> tests using 2 word in search (2/3)'
   for i in range(1, MAX_TESTS):
@@ -154,7 +177,7 @@ def tests(dict):
     rnd1 = choice(dict)
     rnd2 = choice(dict)
     title = '(2words)selected random word: '+rnd1+', '+rnd2
-    filename = 'result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '---'
     print '--> '+title
@@ -167,6 +190,10 @@ def tests(dict):
       # f.close()  
       None
 
+  print '--> cleaning caches ...'
+  clean_caches()
+
+
   print '--> tests using 3 words in search (3/3)'
   for i in range(1, MAX_TESTS):
     type = '3word'
@@ -174,7 +201,7 @@ def tests(dict):
     rnd2 = choice(dict)
     rnd3 = choice(dict)
     title = '(3words)selected random words: '+rnd1+ ', '+rnd2+', '+rnd3
-    filename = 'result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '('+filename+')'
     print '---'
@@ -189,8 +216,31 @@ def tests(dict):
       None
       
 
-
-
+def options(argv):
+   try:
+      opts, args = getopt.getopt(argv,"vhcH")
+   except getopt.GetoptError:
+      print 'test.py [-v|--vertical] | [-h|--horizontal] | [-c|--cache] | -H "Help"'
+      sys.exit(2)
+   for opt, arg in opts:
+      if opt == '-H':
+         print 'test.py [-v|--vertical] | [-h|--horizontal] | [-c|--cache] | -H "Help"'
+         sys.exit()
+      elif opt in ("-v", "--vertical"):
+         op = 'v'
+         mode = 'Vertical Scalability.'
+      elif opt in ("-h", "--horizontal"):
+         op = 'h'
+         mode = 'Horizontal scalability.'
+      elif opt in ("-c", "--cache"):
+         op = 'c'
+         mode = 'Cache.'
+      else:
+         op = 'c'
+         mode = 'Cache.'         
+   print '   * testing: ', mode
+   return op
+   
 
 if __name__ == "__main__":
 
@@ -205,6 +255,23 @@ if __name__ == "__main__":
     clean_caches()
     
     print '4. starting tests ...'
-    tests(dict)
+    op = options(sys.argv[1:])
+    tests(dict, op)
     
     print '5. ...done.'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -17,7 +17,7 @@ set timefmt "%s"
 # Specify the *output* format for the x-axis tick labels
 set format x "%S"
 # Label the x-axis
-set xlabel 'seconds'
+set xlabel 'request #'
 # Label the y-axis
 set ylabel "response time (ms)"
 # Tell gnuplot to use tabs as the delimiter instead of spaces (default)
