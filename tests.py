@@ -134,13 +134,14 @@ def tests(dict, op):
   
   if (op == 'v'):
     # Vertical Scalability.
-    MAX_CONNS = '100000'
-    MAX_CONCURRENT = '100'
+    MAX_CONNS = 100
+    MAX_CONNS_ORIG = 100
+    MAX_CONCURRENT = '1'
     mode='vertical'
   elif (op == 'h'):
     # Horizontal scalability.
-    MAX_CONNS = '100000'
-    MAX_CONCURRENT = '100000'
+    MAX_CONNS = '10000'
+    MAX_CONCURRENT = '10000'
     mode='horizontal'     
   else:
     # Cache test.
@@ -153,17 +154,29 @@ def tests(dict, op):
   
   print '--> tests using 1 word in search (1/3)'
   for i in range(1, MAX_TESTS):
+    if (mode == 'vertical'):
+      MAX_CONNS = MAX_CONNS_ORIG * i
     type = '1word'
     rnd = choice(dict)
     title = '(1word)selected random word: '+rnd
-    filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    if (mode == 'vertical'):
+      filename = mode+'_result_'+type+'_'+str(MAX_CONNS)+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    else:
+      filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '---'
     print '--> '+title
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    if (mode == 'vertical'):
+      print '--> command-line: ab -k -n '+str(MAX_CONNS)+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+str(MAX_CONNS)+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    else:
+      print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+          
     try:
       # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "", "-g"+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      if (mode == 'vertical'):
+        subprocess.call(["ab", "-g"+filename, "-n "+str(MAX_CONNS), "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      else:
+        subprocess.call(["ab", "-g"+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)      
       # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
       # f.close()  
@@ -171,22 +184,37 @@ def tests(dict, op):
 
   print '--> cleaning caches ...'
   clean_caches()
+  if (mode == 'vertical'):
+    MAX_CONNS = MAX_CONNS_ORIG
 
     
   print '--> tests using 2 word in search (2/3)'
   for i in range(1, MAX_TESTS):
+    if (mode == 'vertical'):
+      MAX_CONNS = MAX_CONNS_ORIG * i
     type = '2word'
     rnd1 = choice(dict)
     rnd2 = choice(dict)
     title = '(2words)selected random word: '+rnd1+', '+rnd2
     filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    if (mode == 'vertical'):
+      filename = mode+'_result_'+type+'_'+str(MAX_CONNS)+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    else:
+      filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '---'
     print '--> '+title
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    if (mode == 'vertical'):
+      print '--> command-line: ab -k -n '+str(MAX_CONNS)+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+str(MAX_CONNS)+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    else:
+      print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
     try:
       # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "", "-g"+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+      if (mode == 'vertical'):
+        subprocess.call(["ab", "-g"+filename, "-n "+str(MAX_CONNS), "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+      else:
+        subprocess.call(["ab", "-g"+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+          
       # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
       # f.close()  
@@ -194,24 +222,38 @@ def tests(dict, op):
 
   print '--> cleaning caches ...'
   clean_caches()
+  if (mode == 'vertical'):
+    MAX_CONNS = MAX_CONNS_ORIG
 
-
+ 
   print '--> tests using 3 words in search (3/3)'
   for i in range(1, MAX_TESTS):
+    if (mode == 'vertical'):
+      MAX_CONNS = MAX_CONNS_ORIG * i
+           
     type = '3word'
     rnd1 = choice(dict)
     rnd2 = choice(dict)
     rnd3 = choice(dict)
     title = '(3words)selected random words: '+rnd1+ ', '+rnd2+', '+rnd3
-    filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    if (mode == 'vertical'):
+      filename = mode+'_result_'+type+'_'+str(MAX_CONNS)+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
+    else:
+      filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     
     print '('+filename+')'
     print '---'
     print '--> '+title
-    print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    if (mode == 'vertical'):
+      print '--> command-line: ab -k -n '+str(MAX_CONNS)+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+str(MAX_CONNS)+'conns_'+MAX_CONCURRENT+'concurrent.txt'
+    else:
+      print '--> command-line: ab -k -n '+MAX_CONNS+' -c '+MAX_CONCURRENT+' ___ > result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent.txt'
     try:
       # f=open('result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt','wb')
-      subprocess.call(["ab", "", "-g"+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"+rnd3+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      if (mode == 'vertical'):
+        subprocess.call(["ab", "-g"+filename, "-n "+str(MAX_CONNS), "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"+rnd3+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      else:
+        subprocess.call(["ab", "-g"+filename, "-n "+MAX_CONNS, "-c "+MAX_CONCURRENT, HOSTNAME+"search/apachesolr_search/"+rnd1+"/"+rnd2+"/"+rnd3+"/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)      
       # subprocess.call(["gnuplot", "-e FILENAME='"+filename+ "',TITLE='"+title+"'", "creategraphs.gp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     finally:
       # f.close()  
