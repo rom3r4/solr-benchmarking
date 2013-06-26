@@ -40,7 +40,7 @@ def global_consts():
     MAX_CONNS = '3'
     MAX_CONCURRENT = '1'
     # include 'http://' and a triling '/' at the end    
-    HOSTNAME = "http://voa3r.appgee.net/"
+    HOSTNAME = "http://voa3r7.appgee.net/"
     
     # using here number lower than the words in the
     # generated dictionary ( about 30000) will
