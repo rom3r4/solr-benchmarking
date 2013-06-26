@@ -46,7 +46,7 @@ def global_consts():
     # generated dictionary ( about 30000) will
     # ensure our test that the queryed words are 
     # not likely cached
-    MAX_TESTS = 5
+    MAX_TESTS = 2
     
     
     
@@ -196,7 +196,6 @@ def tests(dict, op):
     rnd1 = choice(dict)
     rnd2 = choice(dict)
     title = '(2words)selected random word: '+rnd1+', '+rnd2
-    filename = mode+'_result_'+type+'_'+MAX_CONNS+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     if (mode == 'vertical'):
       filename = mode+'_result_'+type+'_'+str(MAX_CONNS)+'conns_'+MAX_CONCURRENT+'concurrent-'+str(i)+'.txt'
     else:
