@@ -117,36 +117,38 @@ def init_settings():
   
 def clean_caches():
   
-  print '--> restarting php App server'
-  subprocess.call(["service", "zend", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
-  print '--> restarting Web server'
-  subprocess.call(["service", "nginx", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
   print '--> restarting Varnish daemon'
   subprocess.call(["service", "varnish", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
-  print '--> restarting Memcache damemon'
+  print '--> restarting Memcache damemon #1'
   subprocess.call(["service", "memcached", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  print '--> restarting Memcache damemon #2'
+  subprocess.call(["service", "memcached", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  print '--> restarting php'
+  subprocess.call(["service", "php", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
+  print '--> restarting Web server'
+  subprocess.call(["service", "nginx", "restart"], stdout=subprocess.PIPE, stderr=subprocess.PIPE);
 
   
 def tests(dict, op):
   
   
-  if opt in ("-v", "--vertical"):
+  if (op == 'v'):
     # Vertical Scalability.
-    MAX_CONNS = 100000
-    MAX_CONCURRENT = 100
+    MAX_CONNS = '10000'
+    MAX_CONCURRENT = '100'
     mode='vertical'
-  elif opt in ("-h", "--horizontal"):
+  elif (op == 'h'):
     # Horizontal scalability.
-    MAX_CONNS = 100000
-    MAX_CONCURRENT = 100000
+    MAX_CONNS = '10000'
+    MAX_CONCURRENT = '10000'
     mode='horizontal'     
   else:
     # Cache test.
     # 3 x 400 should be lower (1400) that the total
     # number of words in dictionary, to avoid
     # colisions.
-    MAX_CONNS = 3
-    MAX_CONCURRENT = 1
+    MAX_CONNS = '3'
+    MAX_CONCURRENT = '1'
     mode='cache'
   
   print '--> tests using 1 word in search (1/3)'
@@ -218,7 +220,7 @@ def tests(dict, op):
 
 def options(argv):
    try:
-      opts, args = getopt.getopt(argv,"vhcH")
+      opts, args = getopt.getopt(argv, "vhcH")
    except getopt.GetoptError:
       print 'test.py [-v|--vertical] | [-h|--horizontal] | [-c|--cache] | -H "Help"'
       sys.exit(2)
