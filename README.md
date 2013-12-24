@@ -27,7 +27,6 @@ Benchmarking script for running stress-tests to your site
 
 ### Features
 
-- Horizontal / Vertical scalability tests
 - Adjustable search words domain
 - Graphic results (.jpeg)
 
