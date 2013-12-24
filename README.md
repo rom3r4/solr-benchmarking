@@ -16,6 +16,21 @@ Benchmarking script for running stress-tests to your site
     
     $ python tests.py
     
+### Commandline arguments
+
+    tests.py [-v|--vertical] | [-h|--horizontal] | [-c|--cache] | -H "Help"'
+    
+    -v Vertical Scalability tests
+    -h Horizontal scalability tests
+    -c Cleans caches
+    -H this help
+
+### Features
+
+- Horizontal / Vertical scalability tests
+- Adjustable search words domain
+- Graphic results (.jpeg)
+
 
 ### 'License'
 
