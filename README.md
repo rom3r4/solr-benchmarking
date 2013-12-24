@@ -16,7 +16,7 @@ Benchmarking script for running stress-tests to your site
     
     $ python tests.py
     
-### Commandline arguments
+Command-line arguments:
 
     tests.py [-v|--vertical] | [-h|--horizontal] | [-c|--cache] | -H "Help"'
     
