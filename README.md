@@ -1,6 +1,6 @@
 ### [apachesolr-benchs]()
 
-Benchmarking Script for running Stress tests to your site
+Benchmarking script for running stress-tests to your site
 
 ### Requirements
 
@@ -12,7 +12,7 @@ Python
     $ unzip master.zip
     $ cd apachesolr-benchs
     
-    $ python graphs.py
+    $ python tests.py
     
 
 ### 'License'
