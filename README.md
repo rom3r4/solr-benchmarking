@@ -4,7 +4,9 @@ Benchmarking script for running stress-tests to your site
 
 ### Requirements
 
-Python
+- Python
+- ab (Apache Benchmarks)
+- gnuplot
 
 ### Installation 
 
