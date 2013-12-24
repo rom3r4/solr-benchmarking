@@ -1,11 +1,22 @@
-apachesolr-benchs
-=================
+### [apachesolr-benchs]()
 
-Configurable benchmarking Script for running Stress tests to Sites, and dump results to files.
+Benchmarking Script for running Stress tests to your site
 
+### Requirements
 
-## License
-Copyright (c) 2013, University of Alcala de Henares    
-Source code licensed under the [MIT license](LICENSE-MIT "MIT License").
+Python
 
-Documentation licenses under [GPLv3](http://www.gnu.org/licenses/gpl-3.0.html "GPLv3")
+### Installation 
+
+    $ wget https://github.com/julianromerajuarez/apachesolr-benchs/archive/master.zip
+    $ unzip master.zip
+    $ cd apachesolr-benchs
+    
+    $ python graphs.py
+    
+
+### 'License'
+
+This is free and unemcumbered software released into the public domain. For more information, see the accompanying UNLICENSE file.
+
+If you're unfamiliar with public domain, that means it's perfectly fine to start with this skeleton and code away, later relicensing as you see fit.
