@@ -1,6 +1,6 @@
-### [apachesolr-benchs]()
+### [solr-benchmarking]()
 
-Benchmarking script for running stress-tests to your site
+Benchmarking script for Solr
 
 ### Requirements
 
@@ -10,7 +10,9 @@ Benchmarking script for running stress-tests to your site
 
 ### Installation 
 
-    $ wget https://github.com/julianromerajuarez/apachesolr-benchs/archive/master.zip
+(Installation tested on Debian wheezy GNU/Linux)
+
+    $ wget https://github.com/julianromera/solr-benchmarking/archive/master.zip
     $ unzip master.zip
     $ cd apachesolr-benchs
     
