@@ -1,4 +1,4 @@
-### [solr-benchmarking]()
+## [solr-benchmarking]()
 
 Benchmarking script for Solr
 
@@ -32,8 +32,11 @@ Command-line arguments:
 - Adjustable search words domain
 - Graphic results (.jpeg)
 
+### Author
 
-### 'License'
+University of Alcala
+
+### LICENSE
 
 This is free and unemcumbered software released into the public domain. For more information, see the accompanying UNLICENSE file.
 
